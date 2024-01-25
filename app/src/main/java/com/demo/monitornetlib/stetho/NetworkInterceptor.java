@@ -10,6 +10,7 @@ import com.demo.monitornetlib.data.IDataPoolHandleImpl;
 import com.demo.monitornetlib.data.NetworkFeedBean;
 import com.demo.monitornetlib.ui.NetworkManager;
 import com.demo.monitornetlib.utils.NetLogUtils;
+import com.demo.monitornetlib.utils.NetworkTool;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -35,8 +36,6 @@ public class NetworkInterceptor implements Interceptor {
 
     private CallBackListener mCallBackListener;
 
-
-
     public void setCallBackListener(CallBackListener mCallBackListener) {
         this.mCallBackListener = mCallBackListener;
     }
@@ -49,9 +48,7 @@ public class NetworkInterceptor implements Interceptor {
         Request request = chain.request();
         NetLogUtils.d(TAG+"-----request-----"+request.toString());
 
-        //从map集合中取数据，如果有则直接返回，如果没有则存储该数据到map中
-        NetworkFeedBean networkFeedModel = IDataPoolHandleImpl.getInstance().getNetworkFeedModel(requestId);
-        networkFeedModel.setCURL(request.url().toString());
+
 
         // 准备发送请求
         RequestBodyHelper requestBodyHelper = null;
@@ -63,6 +60,7 @@ public class NetworkInterceptor implements Interceptor {
 
         }
         Response response;
+
         try {
             // 发送请求，获得回包
             response = chain.proceed(request);
@@ -73,6 +71,13 @@ public class NetworkInterceptor implements Interceptor {
             }
             throw e;
         }
+        if (NetworkTool.getInstance().isContainsKey(request.url().toString())){
+            return  response;
+        }
+        //从map集合中取数据，如果有则直接返回，如果没有则存储该数据到map中
+        NetworkFeedBean networkFeedModel = IDataPoolHandleImpl.getInstance().getNetworkFeedModel(requestId);
+        networkFeedModel.setCURL(request.url().toString());
+
 
         if (mEventReporter.isEnabled()) {
             if (requestBodyHelper != null && requestBodyHelper.hasBody()) {
@@ -120,6 +125,7 @@ public class NetworkInterceptor implements Interceptor {
         networkFeedModel.setReadTimeoutMillis(readTimeoutMillis);
         networkFeedModel.setWriteTimeoutMillis(writeTimeoutMillis);
         int totalCount = NetworkManager.get().getTotalCount();
+
         networkFeedModel.setTotalCount(totalCount);
         if (mCallBackListener!=null){
             mCallBackListener.inputLog(networkFeedModel);

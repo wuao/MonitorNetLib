@@ -19,6 +19,7 @@ import com.demo.monitornetlib.ui.NetworkDetailActivity;
 import com.demo.monitornetlib.ui.NetworkManager;
 
 import java.net.Proxy;
+import java.util.HashMap;
 
 import okhttp3.OkHttpClient;
 
@@ -28,6 +29,14 @@ public class NetworkTool {
     private static NetworkTool INSTANCE;
     private Application app;
 
+
+    /**
+     * 用于拦截是否过滤存储当前url地址接口
+     * 比如有些长链接地址 发送太过于频繁 影响排查其他接口数据
+     */
+    private static HashMap<String,String> map ;
+
+
     /**
      * 获取NetworkTool实例 ,单例模式
      */
@@ -36,6 +45,7 @@ public class NetworkTool {
             synchronized (NetworkTool.class) {
                 if (INSTANCE == null) {
                     INSTANCE = new NetworkTool();
+                    map= new HashMap();
                 }
             }
         }
@@ -125,5 +135,17 @@ public class NetworkTool {
                 NetRequestActivity.start(context.getApplicationContext());
             }
         });
+    }
+
+    public boolean isContainsKey(String url) {
+        return  map.containsKey(url);
+    }
+
+    public void setMap(String url) {
+        this.map .put(url, url);
+    }
+
+    public HashMap<String, String> getMap() {
+        return map;
     }
 }
