@@ -1,6 +1,8 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-parcelize'
+apply plugin: 'maven-publish'
+
 
 android {
     namespace 'com.demo.monitornetlib'
@@ -25,6 +27,12 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+
+
+
+
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
@@ -48,6 +56,24 @@ android {
     }
 }
 
+publishing{
+    publications {
+        release(MavenPublication) {
+            // 插件的组ID，建议设置为插件的包名
+            groupId = 'com.demo.monitornetlib'
+            // 插件的名字，后续在引用时会用到
+            artifactId = 'MyPlugin'
+            version = '1.0.0'
+
+        }
+    }
+    repositories {
+        maven {
+            url = "$rootDir/repo"
+        }
+    }
+}
+
 dependencies {
     implementation "com.google.android.material:material:1.9.0"
     implementation 'androidx.coordinatorlayout:coordinatorlayout:1.0.0'
@@ -60,6 +86,8 @@ dependencies {
     implementation 'com.github.yangchong211.YCVideoPlayer:VideoView:1.1.0'
 //    implementation 'cn.yc:VideoPlayer:3.1.0'
 
+
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.10'
 
     implementation platform('androidx.compose:compose-bom:2023.03.00')
     implementation 'androidx.compose.ui:ui'
