@@ -53,24 +53,6 @@ android {
 
 }
 
-publishing{
-    publications {
-        release(MavenPublication) {
-            // 插件的组ID，建议设置为插件的包名
-            groupId = 'com.demo.monitornetlib'
-            // 插件的名字，后续在引用时会用到
-            artifactId = 'MyPlugin'
-            version = '1.0.0'
-
-        }
-    }
-    repositories {
-        maven {
-            url = "$rootDir/repo"
-        }
-    }
-}
-
 dependencies {
     implementation "com.google.android.material:material:1.9.0"
     implementation 'androidx.coordinatorlayout:coordinatorlayout:1.0.0'
