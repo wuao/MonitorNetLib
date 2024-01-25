@@ -71,7 +71,7 @@ public class Ping {
                     int index = string.indexOf("time=");
                     String str = string.substring(index + 5, index + 9);
                     NetLogUtils.e(TAG, "time=: " + str);
-                    String result = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss")
+                    String result = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
                             .format(new Date()) + ", " + hostName + ", " + str + "\r\n";
                     NetLogUtils.e(TAG, "result: " + result);
                     write(pingFile, result);

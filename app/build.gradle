@@ -1,7 +1,6 @@
-plugins {
-    id 'com.android.application'
-    id 'org.jetbrains.kotlin.android'
-}
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-parcelize'
 
 android {
     namespace 'com.demo.monitornetlib'
@@ -35,6 +34,9 @@ android {
     }
     buildFeatures {
         compose true
+    }
+    viewBinding{
+        enabled = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion '1.4.3'

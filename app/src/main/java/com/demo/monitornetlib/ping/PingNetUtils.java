@@ -1,7 +1,9 @@
 package com.demo.monitornetlib.ping;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.DhcpInfo;
 import android.net.NetworkInfo;
@@ -9,6 +11,8 @@ import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
+
+import androidx.core.app.ActivityCompat;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -78,7 +82,7 @@ public class PingNetUtils {
     public static String getMobileOperator(Context context) {
         TelephonyManager telManager = (TelephonyManager) context.getApplicationContext()
                 .getSystemService(Context.TELEPHONY_SERVICE);
-        if (telManager == null){
+        if (telManager == null) {
             return "未知运营商";
         }
         String operator = telManager.getSimOperator();
@@ -225,6 +229,16 @@ public class PingNetUtils {
                 .getSystemService(Context.TELEPHONY_SERVICE);
         if (telephonyManager == null) {
             return "TM==null";
+        }
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return  "";
         }
         switch (telephonyManager.getNetworkType()) {
             case TelephonyManager.NETWORK_TYPE_1xRTT:// ~ 50-100 kbps
